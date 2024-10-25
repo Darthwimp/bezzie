@@ -1,3 +1,4 @@
+import 'package:bezzie_app/pages/ai_chat_page.dart';
 import 'package:bezzie_app/pages/chat_page.dart';
 import 'package:bezzie_app/pages/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +14,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 2;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _bodyView = <Widget>[
     ProfilePage(),
-    Text(
-      'work in progress',
-      style: optionStyle,
-    ),
+    AiChatPage(),
     ChatPage()
   ];
 
@@ -83,7 +79,7 @@ class _HomePageState extends State<HomePage>
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50.0),
           child: Container(
-            color: Colors.teal.withOpacity(0.1),
+            color: Colors.teal.withOpacity(0.25),
             child: TabBar(
               onTap: (x) {
                 setState(() {
