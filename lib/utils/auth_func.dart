@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class GoogleAuth{
+class GoogleAuth {
   static User? user;
   static FirebaseAuth auth = FirebaseAuth.instance;
-  static void handleGoogleSignIn(){
-    try {
-      GoogleAuthProvider googleProvider = GoogleAuthProvider();
-      auth.signInWithProvider(googleProvider);
-    } catch (e) {
-      print(e.toString());
-    }
+  static FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static void handleGoogleSignIn() {
+    GoogleAuthProvider googleProvider = GoogleAuthProvider();
+    auth.signInWithProvider(googleProvider);
+    firestore.collection("Users").doc(user!.uid).set({
+      "email": user!.email,
+      "photoURL": user!.photoURL,
+      "uid": user!.uid,
+    });
   }
 }

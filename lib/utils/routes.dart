@@ -6,5 +6,5 @@ import 'package:flutter/material.dart';
 Map<String, WidgetBuilder> routes = {
   '/': (context) => const SignInPage(),
   '/home': (context) => const HomePage(),
-  'home/chat': (context) => const ChatPage(),
+  'home/chat': (context) => ChatPage(),
 };

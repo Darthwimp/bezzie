@@ -80,7 +80,7 @@ class _AiChatPageState extends State<AiChatPage> {
           child: Column(
             children: [
               Expanded(
-                flex: 10,
+                flex: 9,
                 child: ListView.builder(
                   itemCount: messages.length,
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -94,39 +94,45 @@ class _AiChatPageState extends State<AiChatPage> {
               Expanded(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Center(
-                    child: TextField(
-                      controller: controller,
-                      cursorColor: Colors.white,
-                      style: const TextStyle(
-                        color: Colors.white,
+                  padding:
+                      EdgeInsets.only(bottom: 8.h, left: 16.w, right: 16.w),
+                  child: TextField(
+                    controller: controller,
+                    cursorColor: Colors.white,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: "Type a message...",
+                      hintStyle: const TextStyle(
                         fontSize: 16,
+                        color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),
-                      decoration: InputDecoration(
-                        hintText: "Type a message...",
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
+                      filled: true,
+                      fillColor: Colors.black,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                        borderSide: const BorderSide(
                           color: Colors.white,
-                          fontWeight: FontWeight.w600,
                         ),
-                        filled: true,
-                        fillColor: Colors.black,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.r),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                          ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                        borderSide: BorderSide(
+                          color: Colors.teal.withOpacity(0.25),
+                          width: 2.sp,
                         ),
-                        suffixIconColor: Colors.white,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            sendMessage(controller.text);
-                          },
-                          icon: const Icon(
-                            Icons.send,
-                          ),
+                      ),
+                      suffixIconColor: Colors.white,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          sendMessage(controller.text);
+                        },
+                        icon: const Icon(
+                          Icons.send,
                         ),
                       ),
                     ),

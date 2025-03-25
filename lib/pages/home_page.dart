@@ -1,5 +1,6 @@
 import 'package:bezzie_app/pages/ai_chat_page.dart';
 import 'package:bezzie_app/pages/chat_page.dart';
+import 'package:bezzie_app/pages/display_users_page.dart';
 import 'package:bezzie_app/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,10 +15,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 2;
-  static const List<Widget> _bodyView = <Widget>[
+  static final List<Widget> _bodyView = <Widget>[
     ProfilePage(),
     AiChatPage(),
-    ChatPage()
+    DisplayUsers()
   ];
 
   void _onItemTapped(int index) {
@@ -76,6 +77,7 @@ class _HomePageState extends State<HomePage>
       bottomNavigationBar: Container(
         height: 100,
         padding: const EdgeInsets.all(12),
+        color: Colors.transparent,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50.0),
           child: Container(
