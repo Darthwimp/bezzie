@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage>
   static final List<Widget> _bodyView = <Widget>[
     ProfilePage(),
     AiChatPage(),
-    DisplayUsers()
+    ChatPage()
   ];
 
   void _onItemTapped(int index) {

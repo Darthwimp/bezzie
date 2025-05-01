@@ -5,7 +5,8 @@ import 'package:gap/gap.dart';
 Widget getChatMessage(
     {required String message,
     required bool isUser,
-    String senderName = "Bezzie"}) {
+    String? email="Bezzie",
+    }) {
   return Container(
     margin: EdgeInsets.only(bottom: 16.h),
     child: Row(
@@ -28,7 +29,7 @@ Widget getChatMessage(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                (isUser) ? "You" : senderName,
+                (isUser) ? "You" : email!,
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.bold,

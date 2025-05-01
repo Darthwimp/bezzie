@@ -1,8 +1,10 @@
+import 'package:bezzie_app/utils/auth_func.dart';
 import 'package:bezzie_app/utils/theme.dart';
 import 'package:bezzie_app/widgets/chat_message_box.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AiChatPage extends StatefulWidget {
@@ -13,58 +15,70 @@ class AiChatPage extends StatefulWidget {
 }
 
 class _AiChatPageState extends State<AiChatPage> {
-  final String openAiEndpoint = "https://api.openai.com/v1/chat/completions";
-  final String openAiKey = dotenv.env['OPEN_AI_API_KEY']!;
+  final String openAiApiEndpointSendMessage =
+      "https://cheerful-fish-slowly.ngrok-free.app/send-message";
   final dio = Dio();
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   final TextEditingController controller = TextEditingController();
-  final List<Map<String, dynamic>> messages = [
-    {
-      "text": "Hey! Bezzie here this side. How may I assist you today?",
-      "isUser": false,
-    }
-  ];
+  List<Map<String, dynamic>> messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadMessages();
+  }
+
+  Future<void> loadMessages() async {
+    final user = GoogleAuth.user;
+    firestore
+        .collection("users")
+        .doc(user!.uid)
+        .collection("chats")
+        .orderBy("timestamp", descending: false)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        setState(() {
+          messages = snapshot.docs.map((doc) => doc.data()).toList();
+        });
+      }
+      if(snapshot.docs.isEmpty) {
+        setState(() {
+          messages = [
+            {
+              "text": "Hello! How can I assist you today?",
+              "isUser": false,
+            },
+          ];
+        });
+      }
+    });
+  }
 
   Future<void> sendMessage(String message) async {
     if (message.isEmpty) return;
-    if (message.isNotEmpty) {
-      setState(() {
-        messages.add({
-          "text": message,
-          "isUser": true,
-        });
-      });
-    }
+    final user = GoogleAuth.user;
+    final chatRef = firestore.collection("users").doc(user!.uid).collection("chats");
+    await chatRef.add({
+      "text": message,
+      "isUser": true,
+      "timestamp": FieldValue.serverTimestamp(),
+    });
     controller.clear();
-
     try {
       final res = await dio.post(
-        openAiEndpoint,
+        openAiApiEndpointSendMessage,
         data: {
-          "model": "gpt-4-turbo",
-          "messages": [
-            {"role": "user", "content": message}
-          ],
-          "max_tokens": 100,
-          "temperature": 0.7
+          "query": message,
         },
-        options: Options(
-          validateStatus: (_) => true,
-          contentType: Headers.jsonContentType,
-          responseType: ResponseType.json,
-          headers: {
-            "Authorization": "Bearer $openAiKey",
-            "Content-Type": "application/json"
-          },
-        ),
       );
       if (res.statusCode == 200) {
-        final resData = res.data;
-        final botMessage = resData['choices'][0]['message']['content'];
-        setState(() {
-          messages.add({
-            "text": botMessage,
-            "isUser": false,
-          });
+        final resData = res.data['response'].toString();
+        await chatRef.add({
+          "text": resData,
+          "isUser": false,
+          "timestamp": FieldValue.serverTimestamp(),
         });
       }
     } catch (e) {

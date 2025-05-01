@@ -1,4 +1,5 @@
 import 'package:bezzie_app/utils/auth_func.dart';
+import 'package:bezzie_app/utils/mental_state_analyse.dart';
 import 'package:bezzie_app/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,9 +7,9 @@ import 'package:gap/gap.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-
   @override
   Widget build(BuildContext context) {
+    MentalStateAnalyzer mentalStateAnalyzer = MentalStateAnalyzer();
     return Scaffold(
       body: BezzieTheme.mainAppGradient(
         child: Column(

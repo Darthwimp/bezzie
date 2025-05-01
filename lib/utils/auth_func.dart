@@ -8,7 +8,7 @@ class GoogleAuth {
   static void handleGoogleSignIn() {
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
     auth.signInWithProvider(googleProvider);
-    firestore.collection("Users").doc(user!.uid).set({
+    firestore.collection("users").doc(user!.uid).set({
       "email": user!.email,
       "photoURL": user!.photoURL,
       "uid": user!.uid,
